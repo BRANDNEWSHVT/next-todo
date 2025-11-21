@@ -1,4 +1,4 @@
-import db from "./client";
+import { db } from "./client";
 import { todos } from "./schema";
 
 export const seedTodos = async () => {
@@ -15,4 +15,4 @@ export const seedTodos = async () => {
   }
 };
 
-await seedTodos();
+seedTodos();

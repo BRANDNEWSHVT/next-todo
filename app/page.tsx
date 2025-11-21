@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import TodoForm from './ui/todo/todo-form';
 import TodoList from './ui/todo/todo-list';
 
@@ -13,11 +15,15 @@ const Home = async () => {
         <TodoForm />
       </div>
       <div className="w-full max-w-2xl mx-auto">
-        <TodoList
-          initialTodos={todos}
-          initialHasMore={hasMore}
-          initialNextCursor={nextCursor}
-        />
+        <Suspense
+          fallback={<div className="text-center py-8">Loading todos...</div>}
+        >
+          <TodoList
+            initialTodos={todos}
+            initialHasMore={hasMore}
+            initialNextCursor={nextCursor}
+          />
+        </Suspense>
       </div>
     </div>
   );
