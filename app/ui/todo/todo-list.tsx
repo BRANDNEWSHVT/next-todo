@@ -35,6 +35,8 @@ const TodoList = ({
     initialNextCursor
   );
   const [isPending, startTransition] = useTransition();
+  const [isLoadMorePending, setIsLoadMorePending] = useState(false);
+  const skeletonItems = Array.from({ length: 4 });
 
   const fetchMoreTodos = async () => {
     const result = await fetchTodosAction(nextCursor, 5, {
@@ -47,11 +49,16 @@ const TodoList = ({
   const loadMore = () => {
     if (!hasMore || isPending) return;
 
+    setIsLoadMorePending(true);
     startTransition(async () => {
-      const result = await fetchMoreTodos();
-      setTodos((prev) => [...prev, ...result.todos]);
-      setHasMore(result.hasMore);
-      setNextCursor(result.nextCursor);
+      try {
+        const result = await fetchMoreTodos();
+        setTodos((prev) => [...prev, ...result.todos]);
+        setHasMore(result.hasMore);
+        setNextCursor(result.nextCursor);
+      } finally {
+        setIsLoadMorePending(false);
+      }
     });
   };
 
@@ -116,15 +123,27 @@ const TodoList = ({
               <span className="label-text">Completed</span>
             </label>
           </div>
-          <div className="space-y-2">
-            {todos.length === 0 ? (
-              <p className="text-sm opacity-60 text-center py-4">
-                No todos yet. Create one above!
-              </p>
-            ) : (
-              todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)
-            )}
+          <div className="relative">
+            <div className="space-y-2 transition-opacity">
+              {todos.length === 0 ? (
+                <p className="text-sm opacity-60 text-center py-4">
+                  No todos yet. Create one above!
+                </p>
+              ) : (
+                todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+              )}
+            </div>
           </div>
+          {isLoadMorePending && (
+            <div className="space-y-2">
+              {skeletonItems.map((_, index) => (
+                <div
+                  key={`load-more-${index}`}
+                  className="h-12 w-full rounded border border-base-200 bg-base-200/70"
+                />
+              ))}
+            </div>
+          )}
           {hasMore && (
             <div className="text-center py-4">
               <button

@@ -4,45 +4,9 @@ import { desc, eq, lt, and, ilike } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import db from '@/app/lib/db/client';
+import { db } from '@/app/lib/db/client';
 import { createTodoSchema } from '@/app/lib/modules/todo/validators';
 import { todos } from '@/app/lib/db/schema';
-
-export async function createTodoAction(
-  _prevState: { errors: { title?: string[] } },
-  formData: FormData
-) {
-  const title = formData.get('title')?.toString();
-
-  const parsed = createTodoSchema.safeParse({ title });
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
-  }
-
-  await db.insert(todos).values({ title: parsed.data.title }).returning();
-
-  revalidatePath('/');
-  redirect('/');
-}
-
-export async function deleteTodoAction(id: number) {
-  await db.delete(todos).where(eq(todos.id, id));
-
-  revalidatePath('/');
-  redirect('/');
-}
-
-export async function toggleTodoAction(id: number, completed: boolean) {
-  await db
-    .update(todos)
-    .set({
-      completed,
-    })
-    .where(eq(todos.id, id));
-
-  revalidatePath('/');
-  redirect('/');
-}
 
 export async function fetchTodosAction(
   cursor?: number,
@@ -81,4 +45,40 @@ export async function fetchTodosAction(
   const nextCursor = result.length ? result[result.length - 1].id : undefined;
 
   return { todos: result, hasMore, nextCursor };
+}
+
+export async function createTodoAction(
+  _prevState: { errors: { title?: string[] } },
+  formData: FormData
+) {
+  const title = formData.get('title')?.toString();
+
+  const parsed = createTodoSchema.safeParse({ title });
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  await db.insert(todos).values({ title: parsed.data.title }).returning();
+
+  revalidatePath('/');
+  redirect('/');
+}
+
+export async function deleteTodoAction(id: number) {
+  await db.delete(todos).where(eq(todos.id, id));
+
+  revalidatePath('/');
+  redirect('/');
+}
+
+export async function toggleTodoAction(id: number, completed: boolean) {
+  await db
+    .update(todos)
+    .set({
+      completed,
+    })
+    .where(eq(todos.id, id));
+
+  revalidatePath('/');
+  redirect('/');
 }
