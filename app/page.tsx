@@ -5,6 +5,8 @@ import TodoList from './ui/todo/todo-list';
 
 import { fetchTodosAction } from './lib/modules/todo/actions';
 
+export const dynamic = 'force-dynamic';
+
 const Home = async () => {
   const { todos, hasMore, nextCursor } = await fetchTodosAction(undefined, 5);
 
