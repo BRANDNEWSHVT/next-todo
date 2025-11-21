@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { createTodoAction } from '@/app/lib/actions/todo/actions';
+import { createTodoAction } from '@/app/lib/modules/todo/actions';
 import SubmitButton from './submit-button';
 
 const TodoForm = () => {

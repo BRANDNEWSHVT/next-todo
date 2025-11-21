@@ -3,7 +3,7 @@
 import {
   deleteTodoAction,
   toggleTodoAction,
-} from '@/app/lib/actions/todo/actions';
+} from '@/app/lib/modules/todo/actions';
 import { useTransition } from 'react';
 
 interface ITodo {

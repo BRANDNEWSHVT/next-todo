@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { fetchTodosAction } from '@/app/lib/actions/todo/actions';
+import { fetchTodosAction } from '@/app/lib/modules/todo/actions';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 

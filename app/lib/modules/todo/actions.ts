@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import db from '@/app/lib/db/client';
-import { createTodoSchema } from '@/app/lib/actions/todo/validators';
+import { createTodoSchema } from '@/app/lib/modules/todo/validators';
 import { todos } from '@/app/lib/db/schema';
 
 export async function createTodoAction(

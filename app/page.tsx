@@ -1,7 +1,7 @@
 import TodoForm from './ui/todo/todo-form';
 import TodoList from './ui/todo/todo-list';
 
-import { fetchTodosAction } from './lib/actions/todo/actions';
+import { fetchTodosAction } from './lib/modules/todo/actions';
 
 const Home = async () => {
   const { todos, hasMore, nextCursor } = await fetchTodosAction(undefined, 5);
